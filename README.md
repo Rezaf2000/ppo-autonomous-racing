@@ -1,30 +1,27 @@
-# Self-Driving Racecar with Proximal Policy Optimization
+# PPO Autonomous Racing
 
-Solving the OpenAI Gym [CarRacing-v0](https://gym.openai.com/envs/CarRacing-v0) environment using Proximal Policy Optimization.
+A compact PyTorch implementation of Proximal Policy Optimization for the Gym CarRacing environment. The upstream repository includes a demo, report, and saved policy weights.
 
-Read the [full report](extra/report.pdf).
+## Task and policy
 
-## Demo
+A convolutional network processes four stacked image frames and approximates the policy and value function. PPO updates the policy; generalized advantage estimation estimates advantages. The policy uses a Beta distribution for bounded continuous controls.
 
-![Video Demo](extra/demo.gif)
+## Repository map
 
-See the full video demo on [YouTube](https://youtu.be/s1uKkmNiNhM).
+| Path | Purpose |
+| --- | --- |
+| `ppo.py`, `memory.py` | PPO implementation and rollout storage |
+| `main.py`, `config.toml` | Training entry point and configuration |
+| `demo.py` | Playback using a saved policy |
+| `games/`, `scripts/` | Environment and supporting scripts |
+| `extra/` | Upstream report, weights, and demo GIF |
 
-## Results
+## Upstream demo and results
 
-After 5000 training steps, the agent achieves a mean score of 909.48±10.30 over 100 episodes. To reproduce the results, run the following commands:
+![Upstream racing demonstration](extra/demo.gif)
 
-```
-mkdir logs
-python demo.py --ckpt extra/final_weights.pt --delay_ms 0
-```
+The original project reports **909.48 ± 10.30** mean score over 100 episodes after 5,000 training steps. This is an upstream claim, not a new evaluation. Its `extra/final_weights.pt` can be used with `python demo.py --ckpt extra/final_weights.pt --delay_ms 0` where dependencies are available.
 
-Results from episodes will be saved to `logs/episode_rewards.csv`.
+## Source and license
 
-## Implementation Details
-
--   A convolutional neural network to jointly approximate the value function and the policy.
--   Optimization is performed using [Proximal Policy Optimization](https://arxiv.org/abs/1707.06347).
--   Policy network outputs parameters to a Beta distribution, [which is better for bounded continuous action spaces](https://proceedings.mlr.press/v70/chou17a/chou17a.pdf).
--   Advantage estimation is done through the [Generalized Advantage Estimation](https://arxiv.org/abs/1506.02438) algorithm.
--   A series of 4 frames are concatenated to form the input to the network, with frame skipping optionally applied.
+Based on and adapted from [JinayJain/deep-racing](https://github.com/JinayJain/deep-racing). See the [original README](UPSTREAM_README.md), [technical report](extra/report.pdf), and retained [MIT license](LICENSE). No training or demo playback was performed for this fork.
